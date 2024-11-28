@@ -1,55 +1,60 @@
 package app.controller;
 
 import app.model.Pokedex;
+import app.model.Pokemon;
+import app.model.Trainer;
 import app.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.Date;
+
 public class PokemonService {
-    public void crearPokemon(Pokedex pokedex) {
+    public void addPokemon(Pokemon pokemon) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.save(pokedex);
+            session.save(pokemon);
             transaction.commit();
         } catch (Exception e) {
-            System.out.println("Error al crear el pokemon: " + e.getMessage());
+            System.out.println("Error al añadir el pokemon al entrenador: " + e.getMessage());
+
         }
     }
 
-    public void listarPokemon() {
+    public void readPokemon() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.createQuery("from Pokedex ", Pokedex.class).list().forEach(System.out::println);
+            session.createQuery("from Pokemon ", Pokemon.class).list().forEach(System.out::println);
         } catch (Exception e) {
             System.out.println("Error al listar los pokemons: " + e.getMessage());
         }
+    }
+
+    public void updatePokemon(int id, String newNome, Date newNacemento, int newPokedexentry, int newAdestrador) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Transaction transaction = session.beginTransaction();
+            Pokemon pokemon = session.get(Pokemon.class, id);
+            if (pokemon != null) {
+                pokemon.setNome(newNome);
+                pokemon.setNacemento(newNacemento);
+                pokemon.setPokedexentry(newPokedexentry);
+                pokemon.setAdestrador(newAdestrador);
+                session.update(pokemon);
+                transaction.commit();
+            } else {
+                System.out.println("Pokemon con id " + id + " no encontrado.");
+            }
+        }
 
     }
 
-    public void eliminarTodosPokemon() {
+    public void deletePokemon() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.createQuery("DELETE FROM Pokedex").executeUpdate();
+            session.createQuery("DELETE FROM Pokemon").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             System.out.println("Error al eliminar todos los pokemons: " + e.getMessage());
         }
     }
 
-    public void modificarPokemon(int id, String nuevoNombre, double nuevoPeso, String nuevaMisc) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Pokedex pokemon = session.get(Pokedex.class, id);
-            if (pokemon != null) {
-                pokemon.setNome(nuevoNombre);
-                pokemon.setPeso(nuevoPeso);
-                pokemon.setMisc(nuevaMisc);
-                session.update(pokemon);
-                transaction.commit();
-            } else {
-                System.out.println("Pokemon con id " + id + " no encontrado.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error al modificar el pokemon: " + e.getMessage());
-        }
-    }
 }

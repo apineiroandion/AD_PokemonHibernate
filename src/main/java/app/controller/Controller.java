@@ -1,8 +1,11 @@
 package app.controller;
 
 import app.model.Pokedex;
+import app.model.Pokemon;
+import app.model.Trainer;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Date;
 
 public class Controller {
 
@@ -10,22 +13,53 @@ public class Controller {
     double peso[] = {110, 0.7, 24.5, 120, 0.1, 27, 0.5, 6, 206.5, 120.5};
     String misc[] = {"Pokemon dragón", "Pokemon fantasma", "Pokemon fuego", "Pokemon psíquico", "Pokemon hada", "Pokemon siniestro", "Pokemon eléctrico", "Pokemon volador", "Pokemon dragón", "Pokemon normal"};
 
+    PokedexService pokedexService = new PokedexService();
+    TrainerService trainerService = new TrainerService();
     PokemonService pokemonService = new PokemonService();
 
     public void crearPokemon(){
         for (int i = 0; i < nombresPokemon.length; i++) {
-            Pokedex pokemon = new Pokedex(nombresPokemon[i], peso[i], misc[i]);
-            pokemonService.crearPokemon(pokemon);
+            Pokedex pokedex = new Pokedex(nombresPokemon[i], peso[i], misc[i]);
+            pokedexService.crearPokemon(pokedex);
+        }
+    }
+
+    public void crearTrainer(){
+        Trainer trainer = new Trainer("Red", null);
+        Trainer trainer2 = new Trainer("Blue", null);
+        trainerService.createTrainer(trainer);
+        trainerService.createTrainer(trainer2);
+    }
+
+    public void crearEquipos(){
+        for (int i = 0; i < 6; i++) {
+            pokemonService.addPokemon(new Pokemon(nombresPokemon[i],
+                    null,
+                    pokedexService.getPokedexId(nombresPokemon[i]),
+                    trainerService.getTrainerID("Red")));
+        }
+        for (int i = 4; i < 10; i++) {
+            pokemonService.addPokemon(new Pokemon(nombresPokemon[i],
+                    null,
+                    pokedexService.getPokedexId(nombresPokemon[i]),
+                    trainerService.getTrainerID("Blue")));
         }
     }
 
     public void iniciarApp(){
-        crearPokemon();
-        pokemonService.listarPokemon();
-        pokemonService.modificarPokemon(1, "Mymikyu", 0.8, "Pokemon fantasma");
-        pokemonService.listarPokemon();
-        pokemonService.eliminarTodosPokemon();
-        pokemonService.listarPokemon();
+        //crearPokemon();
+        //pokedexService.listarPokemon();
+        //pokedexService.modificarPokemon(1, "Mymikyu", 0.8, "Pokemon fantasma");
+        //pokedexService.listarPokemon();
+        //pokedexService.eliminarTodosPokemon();
+        //crearTrainer();
+        //crearEquipos();
+        System.out.println("Trainers:");
+        trainerService.readTrainer();
+        System.out.println("Pokemons:");
+        pokedexService.listarPokemon();
+        System.out.println("Equipos Pokemon:");
+        pokemonService.readPokemon();
 
 
 

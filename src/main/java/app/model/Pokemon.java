@@ -21,8 +21,7 @@ public class Pokemon {
     public Pokemon() {
     }
 
-    public Pokemon(int id, String nome, Date nacemento, int pokedexentry, int adestrador) {
-        this.id = id;
+    public Pokemon(String nome, Date nacemento, int pokedexentry, int adestrador) {
         this.nome = nome;
         this.nacemento = nacemento;
         this.pokedexentry = pokedexentry;

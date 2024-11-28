@@ -19,8 +19,7 @@ public class Trainer {
     public Trainer() {
     }
 
-    public Trainer(int id, String nome, Date nacemento) {
-        this.id = id;
+    public Trainer(String nome, Date nacemento) {
         this.nome = nome;
         this.nacemento = nacemento;
     }
