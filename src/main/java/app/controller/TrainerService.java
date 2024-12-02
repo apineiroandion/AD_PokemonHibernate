@@ -5,6 +5,7 @@ import app.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class TrainerService {
@@ -22,6 +23,16 @@ public class TrainerService {
         } catch (Exception e) {
             System.out.println("Error al buscar el trainer: " + e.getMessage());
             return -1;
+        }
+    }
+
+    public ArrayList<Trainer> getTrainers() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            System.out.println("Recogiendo los trainers de la db...");
+            return (ArrayList<Trainer>) session.createQuery("from Trainer ", Trainer.class).list();
+        } catch (Exception e) {
+            System.out.println("Error al listar los trainers: " + e.getMessage());
+            return null;
         }
     }
 

@@ -1,15 +1,19 @@
 package app.controller.toXml;
 
+import app.model.Trainer;
+
 import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class XmlWritter {
     static String ruta = "adestradores.xml";
-    XMLOutputFactory factory = XMLOutputFactory.newInstance();
-    FileWriter fileWriter = getFileWriter();
-    XMLStreamWriter writer = getXMLStreamWriter(fileWriter, factory);
+    static XMLOutputFactory factory = XMLOutputFactory.newInstance();
+    static FileWriter fileWriter = getFileWriter();
+    static XMLStreamWriter writer = getXMLStreamWriter(fileWriter, factory);
 
     public static FileWriter getFileWriter() {
         try {
@@ -29,7 +33,30 @@ public class XmlWritter {
         return null;
     }
 
-    public static void escribirXML(XMLStreamWriter writer) {
-        //TODO: metodo que escribe los adestradores en xml
+    public static void escribirXML(ArrayList<Trainer> trainers) {
+        try {
+            writer.writeStartDocument("1.0");
+            writer.writeStartElement("adestradores");
+            for (Trainer trainer : trainers) {
+                writer.writeStartElement("adestrador");
+                writer.writeStartElement("id");
+                writer.writeCharacters(String.valueOf(trainer.getId()));
+                writer.writeEndElement();
+                writer.writeStartElement("nome");
+                writer.writeCharacters(trainer.getNome());
+                writer.writeEndElement();
+                writer.writeStartElement("nacemento");
+                writer.writeCharacters(String.valueOf(trainer.getNacemento()));
+                writer.writeEndElement();
+                writer.writeEndElement();
+            }
+            writer.writeEndElement();
+            writer.writeEndDocument();
+            writer.flush(); 
+            writer.close();
+        } catch (XMLStreamException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

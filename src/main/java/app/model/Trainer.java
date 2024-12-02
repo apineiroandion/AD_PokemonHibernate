@@ -48,6 +48,10 @@ public class Trainer {
         this.nacemento = nacemento;
     }
 
+    public void setNacementoText(String nacemento) {
+        this.nacemento = null;
+    }
+
     @Override
     public String toString() {
         return "Adestrador{" +

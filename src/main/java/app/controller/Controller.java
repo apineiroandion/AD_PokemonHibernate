@@ -1,10 +1,13 @@
 package app.controller;
 
+import app.controller.toXml.XmlReader;
+import app.controller.toXml.XmlWritter;
 import app.model.Pokedex;
 import app.model.Pokemon;
 import app.model.Trainer;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Controller {
@@ -16,6 +19,7 @@ public class Controller {
     PokedexService pokedexService = new PokedexService();
     TrainerService trainerService = new TrainerService();
     PokemonService pokemonService = new PokemonService();
+    XmlReader xmlReader = new XmlReader();
 
     public void crearPokemon(){
         for (int i = 0; i < nombresPokemon.length; i++) {
@@ -46,13 +50,22 @@ public class Controller {
         }
     }
 
+    public void updateTrainers(ArrayList<Trainer> trainers){
+        for (Trainer trainer : trainers) {
+            trainerService.updateTrainer(trainer.getId(), trainer.getNome(), null);
+            System.out.println("Trainer " + trainer.getNome() + " creado.");
+        }
+
+    }
+
     public void iniciarApp(){
         //crearPokemon();
         //pokedexService.listarPokemon();
         //pokedexService.modificarPokemon(1, "Mymikyu", 0.8, "Pokemon fantasma");
         //pokedexService.listarPokemon();
         //pokedexService.eliminarTodosPokemon();
-        //crearTrainer();
+        trainerService.deleteAllTrainers();
+        crearTrainer();
         //crearEquipos();
         System.out.println("Trainers:");
         trainerService.readTrainer();
@@ -60,6 +73,19 @@ public class Controller {
         pokedexService.listarPokemon();
         System.out.println("Equipos Pokemon:");
         pokemonService.readPokemon();
+
+        XmlWritter.escribirXML(trainerService.getTrainers());
+        trainerService.updateTrainer(trainerService.getTrainerID("Red"), "RedUpdated", null);
+        System.out.println("Trainers:");
+        trainerService.readTrainer();
+        ArrayList<Trainer> trainers = xmlReader.readXML();
+        System.out.println("for:");
+        for (Trainer trainer : trainers) {
+            System.out.println(trainer + "dentro for");
+        }
+        updateTrainers(trainers);
+        System.out.println("Trainers:");
+        trainerService.readTrainer();
 
 
 
