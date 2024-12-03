@@ -1,5 +1,7 @@
 package app.controller;
 
+import app.controller.serializer.Deserializar;
+import app.controller.serializer.Serializar;
 import app.controller.toXml.XmlReader;
 import app.controller.toXml.XmlWritter;
 import app.model.Pokedex;
@@ -86,6 +88,18 @@ public class Controller {
         updateTrainers(trainers);
         System.out.println("Trainers:");
         trainerService.readTrainer();
+
+        Serializar.serializePokedex(pokedexService.getPokedex(), "pokedex.ser");
+        System.out.println("Eliminar pokedex...");
+        pokedexService.eliminarTodosPokemon();
+        System.out.println("Pokedex:");
+        pokedexService.listarPokemon();
+        System.out.println("Deserializar pokedex...");
+        pokedexService.setPokedex(Deserializar.deserializePokedexList("pokedex.ser"));
+        System.out.println("Pokedex:");
+        pokedexService.listarPokemon();
+
+
 
 
 

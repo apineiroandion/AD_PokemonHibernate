@@ -5,6 +5,8 @@ import app.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
+
 public class PokedexService {
 
     public int getPokedexId(String nome){
@@ -19,6 +21,25 @@ public class PokedexService {
             System.out.println("Error al obtener el id del pokemon: " + e.getMessage());
         }
         return -1;
+    }
+
+    public ArrayList<Pokedex> getPokedex() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return (ArrayList<Pokedex>) session.createQuery("from Pokedex", Pokedex.class).list();
+        } catch (Exception e) {
+            System.out.println("Error al obtener los pokemons: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void setPokedex(ArrayList<Pokedex> pokedex) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            pokedex.forEach(session::save);
+            transaction.commit();
+        } catch (Exception e) {
+            System.out.println("Error al guardar los pokemons: " + e.getMessage());
+        }
     }
 
     public void crearPokemon(Pokedex pokedex) {
